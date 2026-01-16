@@ -1,0 +1,22 @@
+{
+    "Group": "Aternos",
+    "Name": "IdleTimeout",
+    "Version": "1.0.0",
+    "Description": "A simple idle timeout plugin!",
+    "Authors": [
+        {
+            "Name": "Julian Vennen"
+        }
+    ],
+    "Website": "https://github.com/aternosorg/hytale-idle-timeout/",
+    "ServerVersion": "*",
+    "Dependencies": {
+        
+    },
+    "OptionalDependencies": {
+        
+    },
+    "DisabledByDefault": false,
+    "Main": "org.aternos.idletimeout.IdleTimeoutPlugin",
+    "IncludesAssetPack": false
+}
