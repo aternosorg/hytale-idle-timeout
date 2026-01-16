@@ -33,14 +33,9 @@ public class IdleTimeoutPlugin extends JavaPlugin {
         loaded = true;
 
         LOGGER.atInfo().log("Setting up plugin " + this.getName());
-
-
         config = IdleTimeoutConfig.load();
-
-        if (config.getTimeoutMinutes() != null) {
-            HytaleServer.SCHEDULED_EXECUTOR.scheduleAtFixedRate(this::updatePlayers, 1000, 1000, java.util.concurrent.TimeUnit.MILLISECONDS);
-            this.getEventRegistry().register(PlayerDisconnectEvent.class, event -> playerInfoMap.remove(event.getPlayerRef().getUuid()));
-        }
+        HytaleServer.SCHEDULED_EXECUTOR.scheduleAtFixedRate(this::updatePlayers, 1000, 1000, java.util.concurrent.TimeUnit.MILLISECONDS);
+        this.getEventRegistry().register(PlayerDisconnectEvent.class, event -> playerInfoMap.remove(event.getPlayerRef().getUuid()));
     }
 
     protected PlayerInfo getPlayerInfo(PlayerRef playerRef) {
@@ -48,13 +43,14 @@ public class IdleTimeoutPlugin extends JavaPlugin {
     }
 
     protected void updatePlayers() {
+        var timeout = config.getTimeoutMinutes();
+        if (timeout == null) return;
+
         Universe universe = Universe.get();
         for (var player : universe.getPlayers()) {
             PlayerInfo info = getPlayerInfo(player);
             info.update(player);
 
-            var timeout = config.getTimeoutMinutes();
-            assert timeout != null;
             var kickAfter = info.getLastActiveTime().plus(timeout, ChronoUnit.MINUTES);
             if (Instant.now().isAfter(kickAfter)) {
                 LOGGER.atInfo().log("Kicking idle player " + info.getUuid());
