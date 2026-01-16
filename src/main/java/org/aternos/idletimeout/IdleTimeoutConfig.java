@@ -35,6 +35,10 @@ public class IdleTimeoutConfig {
 
     @Nullable
     public Integer getTimeoutMinutes() {
+        if (timeoutMinutes == null || timeoutMinutes <= 0) {
+            return null;
+        }
+
         return timeoutMinutes;
     }
 }
